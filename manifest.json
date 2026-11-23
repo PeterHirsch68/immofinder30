@@ -1,10 +1,10 @@
 {
-  "name": "ImmoFinder 30 – Miet- & Mietkauf-App",
-  "short_name": "ImmoFinder 30",
+  "name": "Tanjas Teufels Suchmaschine",
+  "short_name": "Teufelssuche",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f2f4f8",
-  "theme_color": "#0a66c2",
+  "background_color": "#090102",
+  "theme_color": "#8b0000",
   "orientation": "portrait",
   "share_target": {
     "action": "./index.html",
@@ -17,9 +17,9 @@
   },
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230a66c2'/%3E%3Cpath d='M256 112L96 248h48v152h88v-96h48v96h88V248h48L256 112z' fill='%23ffffff'/%3E%3C/svg%3E",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

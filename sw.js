@@ -1,5 +1,5 @@
-const CACHE_NAME = "immofinder-30-v1";
-const ASSETS = ["./", "./index.html", "./manifest.json"];
+const CACHE_NAME = "tanjas-teufelssuche-v1";
+const ASSETS = ["./", "./index.html", "./manifest.json", "./tanja_teufel.jpg", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));

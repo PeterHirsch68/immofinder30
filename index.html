@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="ImmoFinder 30" />
-  <meta name="theme-color" content="#0a66c2" />
+  <meta name="apple-mobile-web-app-title" content="Tanjas Teufelssuche" />
+  <meta name="theme-color" content="#8b0000" />
+  <link rel="apple-touch-icon" href="icon-512.png" />
+  <link rel="icon" type="image/png" href="icon-512.png" />
   <link rel="manifest" href="manifest.json" />
-  <title>ImmoFinder 30 – iPhone App</title>
+  <title>Tanjas Teufels Suchmaschine</title>
   <style>
     :root {
-      --primary: #0a66c2;
-      --primary-dark: #084d92;
-      --bg: #f2f4f8;
-      --card: #ffffff;
-      --text: #1c1e21;
-      --muted: #65676b;
-      --border: #dce1e7;
-      --success: #198754;
-      --warning: #f59e0b;
-      --danger: #dc3545;
+      --fire-red: #c8102e;
+      --fire-dark: #140507;
+      --fire-card: #1f090d;
+      --fire-orange: #ff5500;
+      --fire-gold: #ffae00;
+      --text-light: #fff5f5;
+      --text-muted: #d4a5ab;
+      --border-fire: #52141e;
       --safe-top: env(safe-area-inset-top, 20px);
       --safe-bottom: env(safe-area-inset-bottom, 20px);
     }
@@ -33,72 +33,177 @@
 
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      padding-top: calc(var(--safe-top) + 56px);
-      padding-bottom: calc(var(--safe-bottom) + 74px);
+      background: radial-gradient(circle at top, #2c080d 0%, #0d0204 100%);
+      color: var(--text-light);
+      padding-top: calc(var(--safe-top) + 58px);
+      padding-bottom: calc(var(--safe-bottom) + 76px);
+      min-height: 100vh;
     }
 
-    /* iOS Header */
+    /* ======================================================================= */
+    /* START-BILDSCHIRM (SPLASH SCREEN MIT TANJAS BILD)                        */
+    /* ======================================================================= */
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #090102;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: calc(var(--safe-top) + 16px) 20px calc(var(--safe-bottom) + 24px);
+      text-align: center;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-img-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 390px;
+      flex: 1;
+      max-height: 62vh;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 2px solid var(--fire-orange);
+      box-shadow: 0 0 35px rgba(255, 68, 0, 0.65), 0 0 70px rgba(200, 16, 46, 0.45);
+      margin: 8px 0;
+    }
+
+    .splash-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .splash-title {
+      font-size: 26px;
+      font-weight: 900;
+      margin: 10px 0 4px;
+      background: linear-gradient(90deg, #ffae00, #ff4500, #ff1e42);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 18px rgba(255, 69, 0, 0.35);
+      letter-spacing: -0.3px;
+    }
+
+    .splash-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin: 0 0 14px;
+    }
+
+    .btn-devil-start {
+      width: 100%;
+      max-width: 390px;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, #d90429 0%, #ff5400 100%);
+      box-shadow: 0 6px 24px rgba(255, 84, 0, 0.55);
+      cursor: pointer;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-devil-start:active {
+      transform: scale(0.97);
+    }
+
+    /* ======================================================================= */
+    /* HEADER & NAVIGATION                                                     */
+    /* ======================================================================= */
     header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      background: rgba(10, 102, 194, 0.96);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: #fff;
-      padding: calc(var(--safe-top) + 10px) 16px 12px;
+      background: rgba(24, 4, 8, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-fire);
+      padding: calc(var(--safe-top) + 8px) 14px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      gap: 8px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .header-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      border: 1.5px solid var(--fire-orange);
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
     header h1 {
       margin: 0;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: linear-gradient(90deg, #ffbe0b, #ff5400);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .header-btn {
-      background: rgba(255,255,255,0.2);
-      border: none;
+      background: linear-gradient(135deg, #9b001d, #d93800);
+      border: 1px solid #ff6b35;
       color: #fff;
       padding: 6px 12px;
       border-radius: 16px;
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    /* Container & Cards */
     .container {
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
       padding: 12px;
     }
 
     .card {
-      background: var(--card);
-      border-radius: 14px;
+      background: var(--fire-card);
+      border-radius: 16px;
       padding: 14px;
       margin-bottom: 12px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border-fire);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
 
     .card h2 {
       margin: 0 0 10px;
       font-size: 16px;
-      font-weight: 700;
-      color: #111;
+      font-weight: 800;
+      color: #ffbe0b;
     }
 
-    /* Form Controls */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -113,77 +218,112 @@
       display: block;
       font-size: 12px;
       font-weight: 600;
-      color: var(--muted);
+      color: var(--text-muted);
       margin-bottom: 4px;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      padding: 11px 12px;
+      border: 1px solid #631b26;
+      border-radius: 11px;
       font-size: 15px;
-      background: #fafbfc;
-      color: var(--text);
+      background: #120406;
+      color: #fff;
     }
 
-    input:focus, select:focus, textarea:focus {
+    input::placeholder {
+      color: #8c5a61;
+    }
+
+    input:focus, select:focus {
       outline: none;
-      border-color: var(--primary);
-      background: #fff;
+      border-color: var(--fire-orange);
+      box-shadow: 0 0 0 2px rgba(255, 85, 0, 0.25);
     }
 
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       width: 100%;
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-radius: 12px;
       border: none;
-      font-size: 15px;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.08s ease, opacity 0.15s ease;
     }
 
     .btn:active {
       transform: scale(0.98);
-      opacity: 0.9;
     }
 
-    .btn-primary {
-      background: var(--primary);
+    .btn-fire {
+      background: linear-gradient(135deg, #d90429, #ff5400);
       color: #fff;
+      box-shadow: 0 4px 14px rgba(255, 84, 0, 0.35);
     }
 
-    .btn-success {
-      background: var(--success);
+    .btn-gold {
+      background: linear-gradient(135deg, #b85d00, #e88d00);
       color: #fff;
     }
 
     .btn-outline {
-      background: #eef4fb;
-      color: var(--primary);
-      border: 1px solid #c7ddf5;
+      background: #2b0c12;
+      color: #ffb3ba;
+      border: 1px solid #6b1d29;
     }
 
     .btn-sm {
       padding: 7px 11px;
-      font-size: 13px;
+      font-size: 12px;
       border-radius: 9px;
       width: auto;
     }
 
-    /* Portal List */
+    /* Live Results & Portals */
+    .result-card {
+      background: #170609;
+      border: 1px solid #591622;
+      border-left: 4px solid var(--fire-orange);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .result-source {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--fire-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 3px;
+    }
+
+    .result-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 5px;
+      line-height: 1.3;
+    }
+
+    .result-snippet {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 9px;
+    }
+
     .portal-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 11px 0;
-      border-bottom: 1px solid #eef0f3;
+      border-bottom: 1px solid #3a0d15;
       gap: 10px;
     }
 
@@ -199,6 +339,7 @@
     .portal-name {
       font-weight: 700;
       font-size: 14px;
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -209,63 +350,33 @@
       padding: 2px 6px;
       border-radius: 6px;
       font-weight: 700;
-      background: #e7f1ff;
-      color: var(--primary);
-    }
-
-    .badge-mk {
-      background: #fff3cd;
-      color: #856404;
+      background: #4d101b;
+      color: #ffbe0b;
     }
 
     .portal-desc {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--text-muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-top: 2px;
     }
 
-    /* Saved / Shared Items */
-    .saved-card {
-      border-left: 4px solid var(--primary);
-    }
-
-    .saved-title {
-      font-weight: 700;
-      font-size: 15px;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-
-    .saved-meta {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .saved-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    /* Bottom iOS Tab Bar */
+    /* Bottom Navigation */
     nav.tab-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      background: rgba(255, 255, 255, 0.96);
+      background: rgba(20, 4, 7, 0.96);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-fire);
       display: flex;
       padding-bottom: var(--safe-bottom);
-      height: calc(58px + var(--safe-bottom));
+      height: calc(60px + var(--safe-bottom));
     }
 
     .tab-btn {
@@ -277,14 +388,14 @@
       align-items: center;
       justify-content: center;
       font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
+      font-weight: 700;
+      color: var(--text-muted);
       cursor: pointer;
       gap: 3px;
     }
 
     .tab-btn.active {
-      color: var(--primary);
+      color: var(--fire-gold);
     }
 
     .tab-icon {
@@ -305,15 +416,16 @@
       top: calc(var(--safe-top) + 64px);
       left: 50%;
       transform: translateX(-50%);
-      background: #1c1e21;
+      background: linear-gradient(135deg, #d90429, #ff5400);
       color: #fff;
-      padding: 10px 16px;
+      padding: 10px 18px;
       border-radius: 20px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       z-index: 999;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
       display: none;
+      white-space: nowrap;
     }
 
     .pill-filter {
@@ -327,49 +439,91 @@
     .pill {
       padding: 6px 12px;
       border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #fff;
+      border: 1px solid #631b26;
+      background: #170609;
+      color: var(--text-muted);
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
       cursor: pointer;
     }
 
     .pill.active {
-      background: var(--primary);
+      background: linear-gradient(135deg, #d90429, #ff5400);
       color: #fff;
-      border-color: var(--primary);
+      border-color: #ff6b35;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #ffbe0b;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
 
+<!-- ======================================================================= -->
+<!-- START-BILDSCHIRM MIT TANJAS TEUFELSBILD                                 -->
+<!-- ======================================================================= -->
+<div id="splash-screen">
+  <div style="font-size:12px; font-weight:800; letter-spacing:1.5px; color:#ffbe0b; text-transform:uppercase;">
+    &#128293; Willkommen bei &#128293;
+  </div>
+  <div class="splash-img-wrap" onclick="enterApp()">
+    <img src="tanja_teufel.jpg" alt="Tanjas Teufels Suchmaschine" />
+  </div>
+  <div>
+    <div class="splash-title">Tanjas Teufels Suchmaschine</div>
+    <p class="splash-sub">Selbstständige Live-Internetsuche &amp; 30 Immobilienportale ohne API-Schlüssel</p>
+  </div>
+  <button class="btn-devil-start" onclick="enterApp()">Teufelssuche starten &#128293;</button>
+</div>
+
 <header>
-  <h1>ImmoFinder 30</h1>
-  <button class="header-btn" onclick="shareCurrentSearch()">Suche teilen</button>
+  <div class="header-brand">
+    <img src="tanja_teufel.jpg" alt="Tanja" class="header-avatar" onclick="showSplashAgain()" title="Startbild anzeigen" />
+    <h1>Tanjas Teufels Suchmaschine</h1>
+  </div>
+  <button class="header-btn" onclick="shareCurrentSearch()">Teilen &#128242;</button>
 </header>
 
 <div id="toast" class="toast">Gespeichert!</div>
 
 <!-- ======================================================================= -->
-<!-- TAB 1: 30-PORTALE IMMOBILIENSUCHE -->
+<!-- TAB 1: SELBSTSTÄNDIGE LIVE-INTERNETSUCHE                                -->
 <!-- ======================================================================= -->
-<main id="view-search" class="view active container">
+<main id="view-live" class="view active container">
   <div class="card">
-    <h2>Suchkriterien (Ohne API-Schlüssel)</h2>
+    <h2>&#128293; Selbstständiger Suchbefehl (Live im Internet)</h2>
+    <div class="field">
+      <label>Suchbefehl (Mietwohnung, Mietkauf, Haus oder beliebiger Suchbegriff)</label>
+      <input type="text" id="cmd-query" value="Mietwohnung 4 Zimmer Garten Fürth" placeholder="z. B. Mietkauf Haus Nürnberg oder 4 Zimmer Wohnung Balkon" />
+    </div>
+
     <div class="grid-2">
       <div class="field">
-        <label>Ort / PLZ / Region</label>
-        <input type="text" id="q-city" value="Fürth" placeholder="z. B. Nürnberg, Fürth, Erlangen" />
+        <label>Ort / Region (für 30 Portale)</label>
+        <input type="text" id="q-city" value="Fürth" placeholder="z. B. Fürth, Nürnberg, Erlangen" />
       </div>
       <div class="field">
-        <label>Angebotsart</label>
-        <select id="q-type" onchange="renderPortals()">
+        <label>Kategorie</label>
+        <select id="q-type">
           <option value="miete">Mietwohnung</option>
           <option value="mietkauf">Mietkauf-Angebot</option>
           <option value="haus-miete">Haus zur Miete</option>
           <option value="haus-kauf">Haus / Eigentum Kauf</option>
-          <option value="sonstiges">Sonstiges / Grundstück / Gewerbe</option>
+          <option value="sonstiges">Sonstiges / Freie Suche</option>
         </select>
       </div>
     </div>
@@ -391,42 +545,53 @@
       </div>
     </div>
 
-    <div class="field">
-      <label>Zusatz-Stichworte (z. B. Garten, Terrasse, Balkon, Mietkauf)</label>
-      <input type="text" id="q-keywords" placeholder="Garten Terrasse Balkon" />
-    </div>
-
-    <div class="grid-2">
-      <button class="btn btn-primary" onclick="renderPortals()">30 Portale aktualisieren</button>
-      <button class="btn btn-outline" onclick="saveSearchProfile()">Suchprofil merken</button>
+    <div class="grid-2" style="margin-top:4px;">
+      <button class="btn btn-fire" onclick="runAutonomousSearch()">&#128269; Jetzt selbstständig suchen</button>
+      <button class="btn btn-gold" onclick="saveSearchProfile()">&#11088; Suchbefehl merken</button>
     </div>
   </div>
 
   <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h2 style="margin:0;">Gefundene Internet-Treffer (<span id="live-count">0</span>)</h2>
+      <button class="btn btn-outline btn-sm" onclick="shareLiveResults()">Treffer teilen</button>
+    </div>
+    <div id="live-status" style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">
+      Gib oben deinen Suchbefehl ein und tippe auf <strong>„Jetzt selbstständig suchen“</strong>. Die Suchmaschine durchforstet automatisch das Web &amp; Immobilienportale ohne API-Schlüssel.
+    </div>
+    <div id="live-results"></div>
+  </div>
+</main>
+
+<!-- ======================================================================= -->
+<!-- TAB 2: ALLE 30 IMMOBILIENPORTALE DIREKT                                 -->
+<!-- ======================================================================= -->
+<main id="view-portals" class="view container">
+  <div class="card">
     <h2>Die 30 Immobilienportale (<span id="portal-count">30</span>)</h2>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:0;">
+      Alle 30 Portale sind fertig mit deinem Suchbefehl vorausgefüllt – ohne API-Key direkt aufrufbar:
+    </p>
     <div class="pill-filter" id="cat-pills">
       <button class="pill active" onclick="filterPortalCat('alle', this)">Alle (30)</button>
       <button class="pill" onclick="filterPortalCat('top', this)">Top-Portale</button>
-      <button class="pill" onclick="filterPortalCat('mietkauf', this)">Mietkauf & Spezial</button>
+      <button class="pill" onclick="filterPortalCat('mietkauf', this)">Mietkauf &amp; Spezial</button>
       <button class="pill" onclick="filterPortalCat('privat', this)">Provisionsfrei</button>
-      <button class="pill" onclick="filterPortalCat('bank', this)">Banken & Makler</button>
+      <button class="pill" onclick="filterPortalCat('bank', this)">Banken &amp; Makler</button>
     </div>
     <div id="portal-list"></div>
   </div>
 </main>
 
 <!-- ======================================================================= -->
-<!-- TAB 2: GETEILTE INSERATE & MERKLISTE (IPHONE SHARE INBOX) -->
+<!-- TAB 3: MERKLISTE & AUF HANDY TEILEN                                     -->
 <!-- ======================================================================= -->
 <main id="view-inbox" class="view container">
   <div class="card">
-    <h2>Inserat auf iPhone teilen / ablegen</h2>
-    <p style="font-size: 13px; color: var(--muted); margin-top: 0;">
-      Teile Links aus Safari, ImmoScout24, Kleinanzeigen oder WhatsApp direkt hierher – oder füge einen kopierten Link ein:
-    </p>
+    <h2>Inserat merken oder vom iPhone teilen</h2>
     <div class="field">
-      <label>Link zum Inserat (URL)</label>
-      <input type="url" id="in-url" placeholder="https://www.kleinanzeigen.de/..." />
+      <label>Link zum Angebot (URL)</label>
+      <input type="url" id="in-url" placeholder="https://..." />
     </div>
     <div class="grid-2">
       <div class="field">
@@ -444,85 +609,72 @@
     </div>
     <div class="field">
       <label>Notiz / Preis / Kontakt</label>
-      <input type="text" id="in-note" placeholder="z. B. 1.450 € warm, Besichtigung Freitag" />
+      <input type="text" id="in-note" placeholder="z. B. 1.450 € warm, Besichtigung am Samstag" />
     </div>
     <div class="grid-2">
-      <button class="btn btn-success" onclick="addManualItem()">In Merkliste speichern</button>
-      <button class="btn btn-outline" onclick="pasteFromClipboard()">Aus Zwischenablage</button>
+      <button class="btn btn-fire" onclick="addManualItem()">In Merkliste speichern</button>
+      <button class="btn btn-outline" onclick="pasteFromClipboard()">Link einfügen</button>
     </div>
   </div>
 
   <div class="card">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <h2 style="margin:0;">Gespeicherte Angebote (<span id="saved-count">0</span>)</h2>
-      <button class="btn btn-outline btn-sm" onclick="shareAllFavorites()">Liste teilen</button>
+      <h2 style="margin:0;">Meine Merkliste (<span id="saved-count">0</span>)</h2>
+      <button class="btn btn-gold btn-sm" onclick="shareAllFavorites()">Alles teilen &#128242;</button>
     </div>
     <div id="saved-list"></div>
   </div>
 </main>
 
 <!-- ======================================================================= -->
-<!-- TAB 3: IPHONE EINRICHTUNG & SUCHPROFILE -->
+<!-- TAB 4: IPHONE APP INSTALLATION & PROFILE                                -->
 <!-- ======================================================================= -->
 <main id="view-setup" class="view container">
   <div class="card">
-    <h2>Gespeicherte Suchprofile</h2>
+    <h2>Gespeicherte Suchbefehle</h2>
     <div id="profiles-list"></div>
   </div>
 
   <div class="card">
-    <h2>So installierst du die App auf dem iPhone</h2>
-    <ol style="font-size: 14px; line-height: 1.55; padding-left: 20px; margin: 0;">
-      <li>Öffne diese Seite auf deinem iPhone in <strong>Safari</strong>.</li>
+    <h2>Als App auf dem iPhone installieren</h2>
+    <ol style="font-size:14px; line-height:1.55; padding-left:20px; margin:0; color:#f3d8dc;">
+      <li>Öffne diese Seite auf dem iPhone in <strong>Safari</strong>.</li>
       <li>Tippe unten in der Mitte auf das <strong>Teilen-Symbol</strong> (Viereck mit Pfeil nach oben).</li>
       <li>Wähle <strong>„Zum Home-Bildschirm“</strong> und tippe auf <strong>„Hinzufügen“</strong>.</li>
-      <li>Die App erscheint jetzt mit eigenem Icon wie eine native iPhone-App auf deinem Startbildschirm.</li>
+      <li>Tanjas Teufels Suchmaschine erscheint mit ihrem Teufels-Icon als vollwertige App auf deinem iPhone.</li>
     </ol>
   </div>
 
   <div class="card">
-    <h2>Direkt aus anderen Apps teilen (iOS Share-Sheet)</h2>
-    <p style="font-size: 13px; color: var(--muted); margin-top: 0;">
-      Damit du in ImmoScout24, Kleinanzeigen oder Safari auf <strong>Teilen &rarr; ImmoFinder 30</strong> tippen kannst:
+    <h2>Direkt aus Safari/Kleinanzeigen in die App teilen</h2>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:0;">
+      In der Apple-App <strong>Kurzbefehle</strong> einen Kurzbefehl <em>„An Tanjas Teufelssuche“</em> erstellen (im Share-Sheet anzeigen) mit Aktion <strong>„URL öffnen“</strong>:
     </p>
-    <ol style="font-size: 13px; line-height: 1.5; padding-left: 20px; margin: 0;">
-      <li>Öffne auf dem iPhone die vorinstallierte App <strong>Kurzbefehle</strong>.</li>
-      <li>Erstelle einen neuen Kurzbefehl namens <strong>„An ImmoFinder senden“</strong> und aktiviere in den Details <strong>„Im Share-Sheet anzeigen“</strong> (Empfangen: URLs &amp; Text).</li>
-      <li>Füge die Aktion <strong>„URL öffnen“</strong> hinzu mit der Adresse:<br />
-        <code id="shortcut-url-preview" style="display:block; background:#f1f3f5; padding:6px; border-radius:6px; margin-top:4px; word-break:break-all;"></code>
-      </li>
-    </ol>
-  </div>
-
-  <div class="card">
-    <h2>Datensicherung</h2>
-    <div class="grid-2">
-      <button class="btn btn-outline" onclick="exportBackup()">Backup teilen / exportieren</button>
-      <button class="btn btn-outline" style="color:var(--danger); border-color:#f5c2c7;" onclick="clearAllData()">Alle Daten löschen</button>
-    </div>
+    <code id="shortcut-url-preview" style="display:block; background:#120406; border:1px solid #52141e; padding:8px; border-radius:8px; font-size:11px; color:#ffbe0b; word-break:break-all;"></code>
   </div>
 </main>
 
-<!-- Bottom Navigation -->
+<!-- Bottom Tab Bar -->
 <nav class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('search', this)">
-    <span class="tab-icon">&#128269;</span>
+  <button class="tab-btn active" onclick="switchTab('live', this)">
+    <span class="tab-icon">&#128293;</span>
+    <span>Live-Suche</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('portals', this)">
+    <span class="tab-icon">&#127968;</span>
     <span>30 Portale</span>
   </button>
   <button class="tab-btn" onclick="switchTab('inbox', this)">
     <span class="tab-icon">&#128229;</span>
-    <span>Geteilt &amp; Merkliste</span>
+    <span>Merkliste</span>
   </button>
   <button class="tab-btn" onclick="switchTab('setup', this)">
-    <span class="tab-icon">&#9881;&#65039;</span>
-    <span>iPhone &amp; Profile</span>
+    <span class="tab-icon">&#128241;</span>
+    <span>iPhone App</span>
   </button>
 </nav>
 
 <script>
-  // ===========================================================================
-  // DIE 30 IMMOBILIENPORTALE (OHNE API-SCHLÜSSEL VIA SMART-QUERY-URL)
-  // ===========================================================================
   const PORTALS = [
     { name: "1. ImmoScout24", cat: "top", desc: "Marktführer für Mietwohnungen, Häuser & Mietkauf", build: (q) => `https://www.immobilienscout24.de/Suche/de/${q.citySlug}/${q.type === 'mietkauf' ? 'haus-kaufen' : q.type === 'haus-miete' ? 'haus-mieten' : q.type === 'haus-kauf' ? 'haus-kaufen' : 'wohnung-mieten'}?enteredFrom=one_step_search${q.rooms ? '&numberofrooms=' + q.rooms + '.0-' : ''}${q.price ? '&price=-' + q.price : ''}` },
     { name: "2. Immowelt", cat: "top", desc: "Großes Portal inkl. Immonet-Bestand", build: (q) => `https://www.immowelt.de/liste/${q.citySlug}/${q.type.includes('kauf') ? 'haeuser/kaufen' : 'wohnungen/mieten'}?sort=relevanz${q.rooms ? '&roomi=' + q.rooms : ''}${q.price ? '&prima=' + q.price : ''}` },
@@ -533,21 +685,21 @@
     { name: "7. Mietkauf.de", cat: "mietkauf", desc: "Spezialportal ausschließlich für Mietkauf-Immobilien", build: (q) => `https://www.mietkauf.de/angebote?ort=${encodeURIComponent(q.city)}` },
     { name: "8. Meinestadt.de Immobilien", cat: "top", desc: "Regionale Wohnungs- & Hausangebote", build: (q) => `https://immobilien.meinestadt.de/${q.citySlug}/${q.type.includes('kauf') ? 'kaufen' : 'mieten'}` },
     { name: "9. Immobilien.de", cat: "top", desc: "Bundesweite Immobiliensuche", build: (q) => `https://www.immobilien.de/Suche/${encodeURIComponent(q.city)}` },
-    { name: "10. WG-Gesucht", cat: "privat", desc: "Wohnungen, 1-4 Zimmer & Zwischenmiete von privat", build: (q) => `https://www.wg-gesucht.de/wohnungen-in-${q.citySlug}.html` },
+    { name: "10. WG-Gesucht", cat: "privat", desc: "Wohnungen, 1-5 Zimmer & Zwischenmiete von privat", build: (q) => `https://www.wg-gesucht.de/wohnungen-in-${q.citySlug}.html` },
     { name: "11. Kalaydo Immobilien", cat: "privat", desc: "Regionaler Anzeigenmarkt für Miete & Kauf", build: (q) => `https://www.kalaydo.de/immobilien/${q.citySlug}/` },
     { name: "12. Immopool.de", cat: "privat", desc: "Angebote von Maklern & Privatpersonen", build: (q) => `https://www.immopool.de/de/suche?ort=${encodeURIComponent(q.city)}` },
-    { name: "13. Wohnung-jetzt.de", cat: "privat", desc: "Mietwohnungen & Mietkauf-Inserate", build: (q) => `https://www.wohnung-jetzt.de/suche?ort=${encodeURIComponent(q.city)}&stichwort=${encodeURIComponent(q.typeLabel)}` },
+    { name: "13. Wohnung-jetzt.de", cat: "privat", desc: "Mietwohnungen & Mietkauf-Inserate", build: (q) => `https://www.wohnung-jetzt.de/suche?ort=${encodeURIComponent(q.city)}&stichwort=${encodeURIComponent(q.fullQuery)}` },
     { name: "14. Wunschimmo.de", cat: "top", desc: "Umfangreiche Datenbank für Miete & Kauf", build: (q) => `https://www.wunschimmo.de/suche/${q.citySlug}` },
     { name: "15. 1a-Immobilienmarkt.de", cat: "mietkauf", desc: "Wohnungen, Häuser, Mietkauf & Anlageobjekte", build: (q) => `https://www.1a-immobilienmarkt.de/suche.html?ort=${encodeURIComponent(q.city)}` },
-    { name: "16. Immo4trans.de", cat: "mietkauf", desc: "Spezialisiert auf Mietkauf & Immobilienfinanzierung", build: (q) => `https://www.google.com/search?q=site:immo4trans.de+${encodeURIComponent(q.fullQuery)}` },
-    { name: "17. Null-Provision.de", cat: "privat", desc: "Provisionsfreie Immobilien von privat", build: (q) => `https://www.google.com/search?q=site:null-provision.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "16. Immo4trans.de", cat: "mietkauf", desc: "Spezialisiert auf Mietkauf & Immobilienfinanzierung", build: (q) => `https://duckduckgo.com/?q=site:immo4trans.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "17. Null-Provision.de", cat: "privat", desc: "Provisionsfreie Immobilien von privat", build: (q) => `https://duckduckgo.com/?q=site:null-provision.de+${encodeURIComponent(q.fullQuery)}` },
     { name: "18. Immobilie1.de", cat: "top", desc: "Portal deutscher Immobilienverbände", build: (q) => `https://www.immobilie1.de/suche?ort=${encodeURIComponent(q.city)}` },
-    { name: "19. Regionalimmobilien24", cat: "mietkauf", desc: "Lokale Angebote & Mietkauf-Objekte", build: (q) => `https://www.google.com/search?q=site:regionalimmobilien24.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "19. Regionalimmobilien24", cat: "mietkauf", desc: "Lokale Angebote & Mietkauf-Objekte", build: (q) => `https://duckduckgo.com/?q=site:regionalimmobilien24.de+${encodeURIComponent(q.fullQuery)}` },
     { name: "20. eBay Immobilien", cat: "mietkauf", desc: "Auktionen, Sofortkauf & Mietkauf-Angebote", build: (q) => `https://www.ebay.de/sch/i.html?_nkw=${encodeURIComponent(q.fullQuery)}&_sacat=10542` },
     { name: "21. S-Immobilien (Sparkasse)", cat: "bank", desc: "Immobilien der Sparkassen-Finanzgruppe", build: (q) => `https://www.s-immobilien.de/suche?ort=${encodeURIComponent(q.city)}` },
-    { name: "22. VR-Immo (Volksbanken)", cat: "bank", desc: "Immobilienangebote der Volks- und Raiffeisenbanken", build: (q) => `https://www.google.com/search?q=site:vr-immo.de+${encodeURIComponent(q.fullQuery)}` },
-    { name: "23. Deutsche Bank Immobilien", cat: "bank", desc: "Geprüfte Wohn- und Anlageimmobilien", build: (q) => `https://www.google.com/search?q=site:immobilien.deutsche-bank.de+${encodeURIComponent(q.fullQuery)}` },
-    { name: "24. Postbank Immobilien", cat: "bank", desc: "Bundesweite Wohnungen & Häuser", build: (q) => `https://www.google.com/search?q=site:immobilien.postbank.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "22. VR-Immo (Volksbanken)", cat: "bank", desc: "Immobilienangebote der Volks- und Raiffeisenbanken", build: (q) => `https://duckduckgo.com/?q=site:vr-immo.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "23. Deutsche Bank Immobilien", cat: "bank", desc: "Geprüfte Wohn- und Anlageimmobilien", build: (q) => `https://duckduckgo.com/?q=site:immobilien.deutsche-bank.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "24. Postbank Immobilien", cat: "bank", desc: "Bundesweite Wohnungen & Häuser", build: (q) => `https://duckduckgo.com/?q=site:immobilien.postbank.de+${encodeURIComponent(q.fullQuery)}` },
     { name: "25. Engel & Völkers", cat: "bank", desc: "Hochwertige Miet- und Kaufobjekte", build: (q) => `https://www.engelvoelkers.com/de-de/suche/?q=${encodeURIComponent(q.city)}` },
     { name: "26. Von Poll Immobilien", cat: "bank", desc: "Traditionsmakler mit regionalen Standorten", build: (q) => `https://www.von-poll.com/de/immobilien?location=${encodeURIComponent(q.city)}` },
     { name: "27. Nestoria Metasuche", cat: "mietkauf", desc: "Aggregiert Dutzende deutsche Immobilienbörsen", build: (q) => `https://www.nestoria.de/${q.citySlug}/immobilien/${q.type.includes('kauf') ? 'kaufen' : 'mieten'}` },
@@ -557,12 +709,18 @@
   ];
 
   let currentPortalFilter = "alle";
-  let savedItems = JSON.parse(localStorage.getItem("immofinder_saved") || "[]");
-  let savedProfiles = JSON.parse(localStorage.getItem("immofinder_profiles") || "[]");
+  let liveFoundItems = [];
+  let savedItems = JSON.parse(localStorage.getItem("tanja_saved") || "[]");
+  let savedProfiles = JSON.parse(localStorage.getItem("tanja_profiles") || "[]");
 
-  // ===========================================================================
-  // INITIALISIERUNG & SHARE-EMPFANG (WENN VOM IPHONE GETEILT WIRD)
-  // ===========================================================================
+  function enterApp() {
+    document.getElementById("splash-screen").classList.add("hidden");
+  }
+
+  function showSplashAgain() {
+    document.getElementById("splash-screen").classList.remove("hidden");
+  }
+
   window.addEventListener("DOMContentLoaded", () => {
     handleIncomingShare();
     renderPortals();
@@ -573,54 +731,6 @@
     document.getElementById("shortcut-url-preview").textContent =
       `${baseUrl}?share_url=[Kurzbefehleingabe]&share_title=Geteiltes+Inserat`;
   });
-
-  function handleIncomingShare() {
-    const params = new URLSearchParams(window.location.search);
-    const sharedUrl = params.get("share_url") || params.get("url") || "";
-    const sharedTitle = params.get("share_title") || params.get("title") || "";
-    const sharedText = params.get("share_text") || params.get("text") || "";
-
-    // Falls URL im Text steckt (z. B. beim Teilen aus Safari/WhatsApp)
-    let extractedUrl = sharedUrl;
-    if (!extractedUrl && sharedText) {
-      const match = sharedText.match(/https?:\/\/[^\s]+/);
-      if (match) extractedUrl = match[0];
-    }
-
-    if (extractedUrl || sharedTitle || sharedText) {
-      const autoCat = (sharedTitle + " " + sharedText).toLowerCase().includes("mietkauf")
-        ? "Mietkauf"
-        : "Mietwohnung";
-
-      savedItems.unshift({
-        id: Date.now(),
-        url: extractedUrl,
-        title: sharedTitle || detectPortalName(extractedUrl) || "Geteiltes Immobilien-Inserat",
-        cat: autoCat,
-        note: sharedText && sharedText !== extractedUrl ? sharedText : "",
-        date: new Date().toLocaleDateString("de-DE")
-      });
-      persistSaved();
-      showToast("Geteiltes Inserat vom iPhone gespeichert!");
-
-      // Tab direkt auf "Geteilt & Merkliste" wechseln
-      const inboxTabBtn = document.querySelectorAll(".tab-btn")[1];
-      switchTab("inbox", inboxTabBtn);
-
-      // URL bereinigen, damit Reload nicht doppelt speichert
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }
-
-  function detectPortalName(url) {
-    if (!url) return "";
-    try {
-      const host = new URL(url).hostname.replace("www.", "");
-      return "Inserat von " + host;
-    } catch {
-      return "";
-    }
-  }
 
   function showToast(msg) {
     const t = document.getElementById("toast");
@@ -636,36 +746,199 @@
     if (btnEl) btnEl.classList.add("active");
   }
 
-  // ===========================================================================
-  // SUCHLOGIK FÜR DIE 30 PORTALE
-  // ===========================================================================
   function getQueryData() {
+    const cmd = document.getElementById("cmd-query").value.trim();
     const city = document.getElementById("q-city").value.trim() || "Deutschland";
     const type = document.getElementById("q-type").value;
     const rooms = document.getElementById("q-rooms").value;
     const price = document.getElementById("q-price").value.trim();
-    const keywords = document.getElementById("q-keywords").value.trim();
-
-    const typeLabels = {
-      "miete": "Mietwohnung",
-      "mietkauf": "Mietkauf",
-      "haus-miete": "Haus mieten",
-      "haus-kauf": "Haus kaufen",
-      "sonstiges": "Immobilie"
-    };
 
     const citySlug = city.toLowerCase()
       .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
       .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-    const typeLabel = typeLabels[type] || "Mietwohnung";
-    const fullQuery = [typeLabel, city, rooms ? `${rooms} Zimmer` : "", keywords]
-      .filter(Boolean)
-      .join(" ");
-
-    return { city, citySlug, type, typeLabel, rooms, price, keywords, fullQuery };
+    const fullQuery = cmd || `${type === 'mietkauf' ? 'Mietkauf' : 'Mietwohnung'} ${city} ${rooms ? rooms + ' Zimmer' : ''}`.trim();
+    return { cmd, city, citySlug, type, rooms, price, fullQuery };
   }
 
+  // ===========================================================================
+  // SELBSTSTÄNDIGE LIVE-INTERNETSUCHE (OHNE API-KEY)
+  // ===========================================================================
+  async function runAutonomousSearch() {
+    const q = getQueryData();
+    renderPortals();
+
+    const statusEl = document.getElementById("live-status");
+    const resultsEl = document.getElementById("live-results");
+    statusEl.innerHTML = `<span class="spinner"></span> Suche selbstständig im Internet nach <strong>„${escapeHtml(q.fullQuery)}“</strong> ...`;
+    resultsEl.innerHTML = "";
+    liveFoundItems = [];
+
+    const searchQueries = [
+      q.fullQuery,
+      `${q.fullQuery} site:kleinanzeigen.de OR site:immowelt.de OR site:ohne-makler.net`
+    ];
+
+    const collected = [];
+    const seenUrls = new Set();
+
+    // 1. Live-Web-Abfrage über öffentliche CORS-Proxys auf DuckDuckGo HTML (kein API-Key nötig)
+    for (const sq of searchQueries) {
+      const ddgUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(sq)}`;
+      const items = await fetchDdgResults(ddgUrl);
+      for (const it of items) {
+        if (!seenUrls.has(it.url)) {
+          seenUrls.add(it.url);
+          collected.push(it);
+        }
+      }
+      if (collected.length >= 15) break;
+    }
+
+    // 2. Direkte Portal-Trefferkarten als Ergänzung hinzufügen, falls Web-Proxy eingeschränkt antwortet
+    const topDirectPortals = PORTALS.slice(0, 8).map(p => ({
+      title: `${p.name.replace(/^\d+\.\s*/, "")}: Aktuelle Angebote für „${q.fullQuery}“`,
+      url: p.build(q),
+      snippet: p.desc + " – Direkt geöffnete Trefferliste für deinen Suchbefehl.",
+      source: p.name.replace(/^\d+\.\s*/, "")
+    }));
+
+    liveFoundItems = collected.length > 0 ? [...collected, ...topDirectPortals] : topDirectPortals;
+    document.getElementById("live-count").textContent = liveFoundItems.length;
+
+    if (collected.length > 0) {
+      statusEl.innerHTML = `&#9989; <strong>${collected.length} Live-Internet-Treffer</strong> + <strong>${topDirectPortals.length} Direkt-Portale</strong> gefunden!`;
+    } else {
+      statusEl.innerHTML = `&#128293; <strong>${topDirectPortals.length} Direkt-Suchergebnisse</strong> für <strong>„${escapeHtml(q.fullQuery)}“</strong> zusammengestellt (weitere 22 Portale im Tab „30 Portale“).`;
+    }
+
+    renderLiveResults();
+  }
+
+  async function fetchDdgResults(targetUrl) {
+    const proxies = [
+      (u) => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+      (u) => `https://corsproxy.io/?${encodeURIComponent(u)}`
+    ];
+
+    for (const buildProxy of proxies) {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 7000);
+        const resp = await fetch(buildProxy(targetUrl), { signal: controller.signal });
+        clearTimeout(timer);
+        if (!resp.ok) continue;
+
+        let htmlText = "";
+        const contentType = resp.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          const json = await resp.json();
+          htmlText = json.contents || "";
+        } else {
+          htmlText = await resp.text();
+        }
+
+        if (!htmlText) continue;
+
+        const doc = new DOMParser().parseFromString(htmlText, "text/html");
+        const nodes = doc.querySelectorAll(".result, .web-result");
+        const parsed = [];
+
+        nodes.forEach(node => {
+          const a = node.querySelector("a.result__a, .result__title a");
+          const snip = node.querySelector(".result__snippet");
+          if (!a) return;
+
+          let href = a.getAttribute("href") || "";
+          // DuckDuckGo Redirect-URL bereinigen
+          if (href.includes("uddg=")) {
+            const m = href.match(/uddg=([^&]+)/);
+            if (m) href = decodeURIComponent(m[1]);
+          }
+          if (!href.startsWith("http")) return;
+
+          let domain = "";
+          try { domain = new URL(href).hostname.replace("www.", ""); } catch {}
+
+          parsed.push({
+            title: a.textContent.trim(),
+            url: href,
+            snippet: snip ? snip.textContent.trim() : "Gefundenes Web-Inserat",
+            source: domain || "Web-Treffer"
+          });
+        });
+
+        if (parsed.length > 0) return parsed;
+      } catch (e) {
+        // Nächsten Proxy versuchen
+      }
+    }
+    return [];
+  }
+
+  function renderLiveResults() {
+    const box = document.getElementById("live-results");
+    box.innerHTML = "";
+
+    liveFoundItems.forEach((item, idx) => {
+      const card = document.createElement("div");
+      card.className = "result-card";
+      card.innerHTML = `
+        <div class="result-source">${escapeHtml(item.source)}</div>
+        <div class="result-title">${escapeHtml(item.title)}</div>
+        <div class="result-snippet">${escapeHtml(item.snippet)}</div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          <a href="${item.url}" target="_blank" rel="noopener" class="btn btn-fire btn-sm" style="text-decoration:none;">Öffnen</a>
+          <button class="btn btn-gold btn-sm" onclick="saveLiveItem(${idx})">+ Merkliste</button>
+          <button class="btn btn-outline btn-sm" onclick="shareLiveItem(${idx})">Teilen &#128242;</button>
+        </div>
+      `;
+      box.appendChild(card);
+    });
+  }
+
+  function saveLiveItem(idx) {
+    const item = liveFoundItems[idx];
+    if (!item) return;
+    const isMk = (item.title + " " + item.snippet).toLowerCase().includes("mietkauf");
+    savedItems.unshift({
+      id: Date.now(),
+      url: item.url,
+      title: item.title,
+      cat: isMk ? "Mietkauf" : "Mietwohnung",
+      note: item.snippet.slice(0, 120),
+      date: new Date().toLocaleDateString("de-DE")
+    });
+    persistSaved();
+    showToast("Treffer in Merkliste gespeichert!");
+  }
+
+  async function shareLiveItem(idx) {
+    const item = liveFoundItems[idx];
+    if (!item) return;
+    await triggerNativeShare({
+      title: item.title,
+      text: `${item.title}\n${item.snippet}`,
+      url: item.url
+    });
+  }
+
+  async function shareLiveResults() {
+    if (liveFoundItems.length === 0) {
+      showToast("Bitte zuerst eine Suche starten.");
+      return;
+    }
+    const q = getQueryData();
+    const lines = liveFoundItems.slice(0, 10).map((it, i) => `${i + 1}. ${it.title}\n${it.url}`).join("\n\n");
+    await triggerNativeShare({
+      title: `Tanjas Teufelssuche: ${q.fullQuery}`,
+      text: `Suchergebnisse für „${q.fullQuery}“:\n\n${lines}`
+    });
+  }
+
+  // ===========================================================================
+  // 30 PORTALE LISTE
+  // ===========================================================================
   function filterPortalCat(cat, btn) {
     currentPortalFilter = cat;
     document.querySelectorAll("#cat-pills .pill").forEach(p => p.classList.remove("active"));
@@ -683,67 +956,91 @@
 
     filtered.forEach(p => {
       const targetUrl = p.build(q);
-      const isMk = p.cat === "mietkauf";
       const div = document.createElement("div");
       div.className = "portal-item";
       div.innerHTML = `
         <div class="portal-info">
           <div class="portal-name">
             <span>${p.name}</span>
-            ${isMk ? '<span class="badge badge-mk">Mietkauf</span>' : ''}
+            ${p.cat === "mietkauf" ? '<span class="badge">Mietkauf</span>' : ''}
           </div>
           <div class="portal-desc">${p.desc}</div>
         </div>
         <div style="display:flex; gap:6px;">
-          <a href="${targetUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="text-decoration:none;">Öffnen</a>
-          <button class="btn btn-outline btn-sm" onclick="quickSaveSearch('${p.name.replace(/'/g, "")}', '${targetUrl}')">+</button>
+          <a href="${targetUrl}" target="_blank" rel="noopener" class="btn btn-fire btn-sm" style="text-decoration:none;">Öffnen</a>
+          <button class="btn btn-outline btn-sm" onclick="quickSavePortal('${p.name.replace(/'/g, "")}', '${targetUrl}')">+</button>
         </div>
       `;
       list.appendChild(div);
     });
   }
 
-  function quickSaveSearch(portalName, url) {
+  function quickSavePortal(portalName, url) {
     const q = getQueryData();
     savedItems.unshift({
       id: Date.now(),
       url: url,
-      title: `${portalName}: ${q.typeLabel} in ${q.city}`,
+      title: `${portalName}: ${q.fullQuery}`,
       cat: q.type === "mietkauf" ? "Mietkauf" : "Mietwohnung",
-      note: q.fullQuery,
+      note: "Direktlink aus Tanjas Teufels Suchmaschine",
       date: new Date().toLocaleDateString("de-DE")
     });
     persistSaved();
-    showToast("Suchlink in Merkliste abgelegt!");
+    showToast("Portal-Suche gemerkt!");
   }
 
   // ===========================================================================
-  // MERKLISTE & TEILEN AUF DEM IPHONE (WEB SHARE API)
+  // MERKLISTE & IPHONE TEILEN
   // ===========================================================================
+  function handleIncomingShare() {
+    const params = new URLSearchParams(window.location.search);
+    const sharedUrl = params.get("share_url") || params.get("url") || "";
+    const sharedTitle = params.get("share_title") || params.get("title") || "";
+    const sharedText = params.get("share_text") || params.get("text") || "";
+
+    let extractedUrl = sharedUrl;
+    if (!extractedUrl && sharedText) {
+      const m = sharedText.match(/https?:\/\/[^\s]+/);
+      if (m) extractedUrl = m[0];
+    }
+
+    if (extractedUrl || sharedTitle || sharedText) {
+      enterApp();
+      savedItems.unshift({
+        id: Date.now(),
+        url: extractedUrl,
+        title: sharedTitle || "Geteiltes Angebot vom iPhone",
+        cat: (sharedTitle + " " + sharedText).toLowerCase().includes("mietkauf") ? "Mietkauf" : "Mietwohnung",
+        note: sharedText !== extractedUrl ? sharedText : "",
+        date: new Date().toLocaleDateString("de-DE")
+      });
+      persistSaved();
+      switchTab("inbox", document.querySelectorAll(".tab-btn")[2]);
+      showToast("Vom iPhone empfangen & gespeichert!");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
   function addManualItem() {
     const url = document.getElementById("in-url").value.trim();
-    const title = document.getElementById("in-title").value.trim() || detectPortalName(url) || "Immobilien-Angebot";
+    const title = document.getElementById("in-title").value.trim() || "Immobilien-Angebot";
     const cat = document.getElementById("in-cat").value;
     const note = document.getElementById("in-note").value.trim();
 
-    if (!url && !title) {
-      showToast("Bitte Link oder Titel eingeben.");
-      return;
-    }
+    if (!url && !title) return;
 
     savedItems.unshift({
       id: Date.now(),
-      url: url,
-      title: title,
-      cat: cat,
-      note: note,
+      url,
+      title,
+      cat,
+      note,
       date: new Date().toLocaleDateString("de-DE")
     });
 
     document.getElementById("in-url").value = "";
     document.getElementById("in-title").value = "";
     document.getElementById("in-note").value = "";
-
     persistSaved();
     showToast("In Merkliste gespeichert!");
   }
@@ -753,18 +1050,15 @@
       const text = await navigator.clipboard.readText();
       if (text) {
         document.getElementById("in-url").value = text.trim();
-        if (!document.getElementById("in-title").value) {
-          document.getElementById("in-title").value = detectPortalName(text.trim());
-        }
-        showToast("Aus Zwischenablage eingefügt!");
+        showToast("Link eingefügt!");
       }
     } catch {
-      showToast("Bitte lang in das Link-Feld tippen und 'Einsetzen' wählen.");
+      showToast("Bitte lang ins Link-Feld tippen & 'Einsetzen' wählen.");
     }
   }
 
   function persistSaved() {
-    localStorage.setItem("immofinder_saved", JSON.stringify(savedItems));
+    localStorage.setItem("tanja_saved", JSON.stringify(savedItems));
     renderSavedItems();
   }
 
@@ -774,25 +1068,21 @@
     container.innerHTML = "";
 
     if (savedItems.length === 0) {
-      container.innerHTML = `<p style="font-size:13px; color:var(--muted);">Noch keine Inserate gespeichert. Teile einen Link vom iPhone oder speichere einen Treffer aus der Suche.</p>`;
+      container.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">Noch keine Angebote gemerkt.</p>`;
       return;
     }
 
     savedItems.forEach(item => {
       const div = document.createElement("div");
-      div.className = "card saved-card";
-      div.style.marginBottom = "10px";
+      div.className = "result-card";
       div.innerHTML = `
-        <div class="saved-title">${item.title}</div>
-        <div class="saved-meta">
-          <span class="badge ${item.cat === 'Mietkauf' ? 'badge-mk' : ''}">${item.cat}</span>
-          &bull; Gespeichert am ${item.date}
-          ${item.note ? `<br/>Notiz: <strong>${item.note}</strong>` : ""}
-        </div>
-        <div class="saved-actions">
-          ${item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="text-decoration:none;">Inserat öffnen</a>` : ""}
-          <button class="btn btn-outline btn-sm" onclick="shareSingleItem(${item.id})">Auf Handy teilen</button>
-          <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="deleteSaved(${item.id})">Löschen</button>
+        <div class="result-source">${escapeHtml(item.cat)} &bull; ${item.date}</div>
+        <div class="result-title">${escapeHtml(item.title)}</div>
+        ${item.note ? `<div class="result-snippet">${escapeHtml(item.note)}</div>` : ""}
+        <div style="display:flex; flex-wrap:wrap; gap:6px;">
+          ${item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="btn btn-fire btn-sm" style="text-decoration:none;">Öffnen</a>` : ""}
+          <button class="btn btn-gold btn-sm" onclick="shareSingleItem(${item.id})">Auf Handy teilen &#128242;</button>
+          <button class="btn btn-outline btn-sm" onclick="deleteSaved(${item.id})">Löschen</button>
         </div>
       `;
       container.appendChild(div);
@@ -807,21 +1097,19 @@
   async function shareSingleItem(id) {
     const item = savedItems.find(i => i.id === id);
     if (!item) return;
-    const sharePayload = {
+    await triggerNativeShare({
       title: item.title,
       text: `${item.title} (${item.cat})${item.note ? ' - ' + item.note : ''}`,
       url: item.url || window.location.href
-    };
-    await triggerNativeShare(sharePayload);
+    });
   }
 
   async function shareCurrentSearch() {
     const q = getQueryData();
-    const shareUrl = `${window.location.origin}${window.location.pathname}?share_title=${encodeURIComponent("Immo-Suche: " + q.fullQuery)}`;
     await triggerNativeShare({
-      title: `Immo-Suche: ${q.fullQuery}`,
-      text: `Immobilien-Suchprofil (${q.fullQuery}) auf 30 Portalen prüfen:`,
-      url: shareUrl
+      title: `Tanjas Teufels Suchmaschine: ${q.fullQuery}`,
+      text: `Suchbefehl in Tanjas Teufels Suchmaschine: ${q.fullQuery}`,
+      url: window.location.href
     });
   }
 
@@ -830,27 +1118,20 @@
       showToast("Merkliste ist noch leer.");
       return;
     }
-    const summary = savedItems.slice(0, 15).map((item, idx) =>
-      `${idx + 1}. ${item.title} [${item.cat}]${item.url ? '\n' + item.url : ''}`
-    ).join("\n\n");
-
+    const text = savedItems.slice(0, 15).map((it, i) => `${i + 1}. ${it.title} [${it.cat}]\n${it.url || ""}`).join("\n\n");
     await triggerNativeShare({
-      title: "Meine Immobilien-Merkliste",
-      text: `Gespeicherte Miet- & Mietkauf-Angebote:\n\n${summary}`
+      title: "Tanjas Merkliste",
+      text
     });
   }
 
   async function triggerNativeShare(data) {
     if (navigator.share) {
-      try {
-        await navigator.share(data);
-      } catch (err) {
-        // Nutzer hat Teilen-Dialog abgebrochen
-      }
+      try { await navigator.share(data); } catch {}
     } else {
       try {
         await navigator.clipboard.writeText(`${data.title}\n${data.text}\n${data.url || ""}`);
-        showToast("In Zwischenablage kopiert (bereit zum Einfügen)!");
+        showToast("In Zwischenablage kopiert!");
       } catch {
         alert(`${data.title}\n${data.text}`);
       }
@@ -858,29 +1139,29 @@
   }
 
   // ===========================================================================
-  // SUCHPROFILE & BACKUP
+  // SUCHPROFILE
   // ===========================================================================
   function saveSearchProfile() {
     const q = getQueryData();
     savedProfiles.unshift({
       id: Date.now(),
-      label: `${q.typeLabel} in ${q.city}${q.rooms ? ' (ab ' + q.rooms + ' Zi.)' : ''}`,
+      cmd: q.cmd,
       city: q.city,
       type: q.type,
       rooms: q.rooms,
       price: q.price,
-      keywords: q.keywords
+      label: q.fullQuery
     });
-    localStorage.setItem("immofinder_profiles", JSON.stringify(savedProfiles));
+    localStorage.setItem("tanja_profiles", JSON.stringify(savedProfiles));
     renderProfiles();
-    showToast("Suchprofil gespeichert!");
+    showToast("Suchbefehl gespeichert!");
   }
 
   function renderProfiles() {
     const box = document.getElementById("profiles-list");
     box.innerHTML = "";
     if (savedProfiles.length === 0) {
-      box.innerHTML = `<p style="font-size:13px; color:var(--muted);">Noch keine Suchprofile gespeichert.</p>`;
+      box.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">Noch keine Suchbefehle gespeichert.</p>`;
       return;
     }
     savedProfiles.forEach(p => {
@@ -888,12 +1169,12 @@
       row.className = "portal-item";
       row.innerHTML = `
         <div class="portal-info">
-          <div class="portal-name">${p.label}</div>
-          <div class="portal-desc">${p.keywords || "Keine Zusatz-Stichworte"}</div>
+          <div class="portal-name">${escapeHtml(p.label)}</div>
+          <div class="portal-desc">Ort: ${escapeHtml(p.city)}</div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn btn-primary btn-sm" onclick="applyProfile(${p.id})">Laden</button>
-          <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="deleteProfile(${p.id})">X</button>
+          <button class="btn btn-fire btn-sm" onclick="applyProfile(${p.id})">Starten</button>
+          <button class="btn btn-outline btn-sm" onclick="deleteProfile(${p.id})">X</button>
         </div>
       `;
       box.appendChild(row);
@@ -903,40 +1184,27 @@
   function applyProfile(id) {
     const p = savedProfiles.find(x => x.id === id);
     if (!p) return;
+    document.getElementById("cmd-query").value = p.cmd;
     document.getElementById("q-city").value = p.city;
     document.getElementById("q-type").value = p.type;
     document.getElementById("q-rooms").value = p.rooms;
     document.getElementById("q-price").value = p.price;
-    document.getElementById("q-keywords").value = p.keywords;
-    renderPortals();
-    switchTab("search", document.querySelectorAll(".tab-btn")[0]);
-    showToast("Suchprofil geladen!");
+    switchTab("live", document.querySelectorAll(".tab-btn")[0]);
+    runAutonomousSearch();
   }
 
   function deleteProfile(id) {
     savedProfiles = savedProfiles.filter(x => x.id !== id);
-    localStorage.setItem("immofinder_profiles", JSON.stringify(savedProfiles));
+    localStorage.setItem("tanja_profiles", JSON.stringify(savedProfiles));
     renderProfiles();
   }
 
-  async function exportBackup() {
-    const payload = JSON.stringify({ savedItems, savedProfiles }, null, 2);
-    await triggerNativeShare({
-      title: "ImmoFinder 30 Backup",
-      text: payload
-    });
-  }
-
-  function clearAllData() {
-    if (confirm("Wirklich alle gespeicherten Inserate und Suchprofile löschen?")) {
-      savedItems = [];
-      savedProfiles = [];
-      localStorage.removeItem("immofinder_saved");
-      localStorage.removeItem("immofinder_profiles");
-      renderSavedItems();
-      renderProfiles();
-      showToast("Alle Daten gelöscht.");
-    }
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
   }
 
   if ("serviceWorker" in navigator) {
