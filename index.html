@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ImmoFinder 30" />
+  <meta name="theme-color" content="#0a66c2" />
+  <link rel="manifest" href="manifest.json" />
+  <title>ImmoFinder 30 – iPhone App</title>
+  <style>
+    :root {
+      --primary: #0a66c2;
+      --primary-dark: #084d92;
+      --bg: #f2f4f8;
+      --card: #ffffff;
+      --text: #1c1e21;
+      --muted: #65676b;
+      --border: #dce1e7;
+      --success: #198754;
+      --warning: #f59e0b;
+      --danger: #dc3545;
+      --safe-top: env(safe-area-inset-top, 20px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      padding-top: calc(var(--safe-top) + 56px);
+      padding-bottom: calc(var(--safe-bottom) + 74px);
+    }
+
+    /* iOS Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(10, 102, 194, 0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #fff;
+      padding: calc(var(--safe-top) + 10px) 16px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .header-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Container & Cards */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #111;
+    }
+
+    /* Form Controls */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fafbfc;
+      color: var(--text);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.08s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #eef4fb;
+      color: var(--primary);
+      border: 1px solid #c7ddf5;
+    }
+
+    .btn-sm {
+      padding: 7px 11px;
+      font-size: 13px;
+      border-radius: 9px;
+      width: auto;
+    }
+
+    /* Portal List */
+    .portal-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid #eef0f3;
+      gap: 10px;
+    }
+
+    .portal-item:last-child {
+      border-bottom: none;
+    }
+
+    .portal-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .portal-name {
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 700;
+      background: #e7f1ff;
+      color: var(--primary);
+    }
+
+    .badge-mk {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .portal-desc {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    /* Saved / Shared Items */
+    .saved-card {
+      border-left: 4px solid var(--primary);
+    }
+
+    .saved-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+      word-break: break-word;
+    }
+
+    .saved-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .saved-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    /* Bottom iOS Tab Bar */
+    nav.tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding-bottom: var(--safe-bottom);
+      height: calc(58px + var(--safe-bottom));
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      gap: 3px;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-icon {
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    .toast {
+      position: fixed;
+      top: calc(var(--safe-top) + 64px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1c1e21;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 999;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      display: none;
+    }
+
+    .pill-filter {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>ImmoFinder 30</h1>
+  <button class="header-btn" onclick="shareCurrentSearch()">Suche teilen</button>
+</header>
+
+<div id="toast" class="toast">Gespeichert!</div>
+
+<!-- ======================================================================= -->
+<!-- TAB 1: 30-PORTALE IMMOBILIENSUCHE -->
+<!-- ======================================================================= -->
+<main id="view-search" class="view active container">
+  <div class="card">
+    <h2>Suchkriterien (Ohne API-Schlüssel)</h2>
+    <div class="grid-2">
+      <div class="field">
+        <label>Ort / PLZ / Region</label>
+        <input type="text" id="q-city" value="Fürth" placeholder="z. B. Nürnberg, Fürth, Erlangen" />
+      </div>
+      <div class="field">
+        <label>Angebotsart</label>
+        <select id="q-type" onchange="renderPortals()">
+          <option value="miete">Mietwohnung</option>
+          <option value="mietkauf">Mietkauf-Angebot</option>
+          <option value="haus-miete">Haus zur Miete</option>
+          <option value="haus-kauf">Haus / Eigentum Kauf</option>
+          <option value="sonstiges">Sonstiges / Grundstück / Gewerbe</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="field">
+        <label>Zimmer ab</label>
+        <select id="q-rooms">
+          <option value="">Egal</option>
+          <option value="2">ab 2 Zimmer</option>
+          <option value="3">ab 3 Zimmer</option>
+          <option value="4" selected>ab 4 Zimmer</option>
+          <option value="5">ab 5 Zimmer</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Max. Preis / Miete (€)</label>
+        <input type="number" id="q-price" placeholder="z. B. 1600" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Zusatz-Stichworte (z. B. Garten, Terrasse, Balkon, Mietkauf)</label>
+      <input type="text" id="q-keywords" placeholder="Garten Terrasse Balkon" />
+    </div>
+
+    <div class="grid-2">
+      <button class="btn btn-primary" onclick="renderPortals()">30 Portale aktualisieren</button>
+      <button class="btn btn-outline" onclick="saveSearchProfile()">Suchprofil merken</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Die 30 Immobilienportale (<span id="portal-count">30</span>)</h2>
+    <div class="pill-filter" id="cat-pills">
+      <button class="pill active" onclick="filterPortalCat('alle', this)">Alle (30)</button>
+      <button class="pill" onclick="filterPortalCat('top', this)">Top-Portale</button>
+      <button class="pill" onclick="filterPortalCat('mietkauf', this)">Mietkauf & Spezial</button>
+      <button class="pill" onclick="filterPortalCat('privat', this)">Provisionsfrei</button>
+      <button class="pill" onclick="filterPortalCat('bank', this)">Banken & Makler</button>
+    </div>
+    <div id="portal-list"></div>
+  </div>
+</main>
+
+<!-- ======================================================================= -->
+<!-- TAB 2: GETEILTE INSERATE & MERKLISTE (IPHONE SHARE INBOX) -->
+<!-- ======================================================================= -->
+<main id="view-inbox" class="view container">
+  <div class="card">
+    <h2>Inserat auf iPhone teilen / ablegen</h2>
+    <p style="font-size: 13px; color: var(--muted); margin-top: 0;">
+      Teile Links aus Safari, ImmoScout24, Kleinanzeigen oder WhatsApp direkt hierher – oder füge einen kopierten Link ein:
+    </p>
+    <div class="field">
+      <label>Link zum Inserat (URL)</label>
+      <input type="url" id="in-url" placeholder="https://www.kleinanzeigen.de/..." />
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Titel / Objekt</label>
+        <input type="text" id="in-title" placeholder="z. B. 4-Zi. Wohnung mit Garten" />
+      </div>
+      <div class="field">
+        <label>Kategorie</label>
+        <select id="in-cat">
+          <option value="Mietwohnung">Mietwohnung</option>
+          <option value="Mietkauf">Mietkauf</option>
+          <option value="Sonstiges">Sonstiges</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Notiz / Preis / Kontakt</label>
+      <input type="text" id="in-note" placeholder="z. B. 1.450 € warm, Besichtigung Freitag" />
+    </div>
+    <div class="grid-2">
+      <button class="btn btn-success" onclick="addManualItem()">In Merkliste speichern</button>
+      <button class="btn btn-outline" onclick="pasteFromClipboard()">Aus Zwischenablage</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <h2 style="margin:0;">Gespeicherte Angebote (<span id="saved-count">0</span>)</h2>
+      <button class="btn btn-outline btn-sm" onclick="shareAllFavorites()">Liste teilen</button>
+    </div>
+    <div id="saved-list"></div>
+  </div>
+</main>
+
+<!-- ======================================================================= -->
+<!-- TAB 3: IPHONE EINRICHTUNG & SUCHPROFILE -->
+<!-- ======================================================================= -->
+<main id="view-setup" class="view container">
+  <div class="card">
+    <h2>Gespeicherte Suchprofile</h2>
+    <div id="profiles-list"></div>
+  </div>
+
+  <div class="card">
+    <h2>So installierst du die App auf dem iPhone</h2>
+    <ol style="font-size: 14px; line-height: 1.55; padding-left: 20px; margin: 0;">
+      <li>Öffne diese Seite auf deinem iPhone in <strong>Safari</strong>.</li>
+      <li>Tippe unten in der Mitte auf das <strong>Teilen-Symbol</strong> (Viereck mit Pfeil nach oben).</li>
+      <li>Wähle <strong>„Zum Home-Bildschirm“</strong> und tippe auf <strong>„Hinzufügen“</strong>.</li>
+      <li>Die App erscheint jetzt mit eigenem Icon wie eine native iPhone-App auf deinem Startbildschirm.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Direkt aus anderen Apps teilen (iOS Share-Sheet)</h2>
+    <p style="font-size: 13px; color: var(--muted); margin-top: 0;">
+      Damit du in ImmoScout24, Kleinanzeigen oder Safari auf <strong>Teilen &rarr; ImmoFinder 30</strong> tippen kannst:
+    </p>
+    <ol style="font-size: 13px; line-height: 1.5; padding-left: 20px; margin: 0;">
+      <li>Öffne auf dem iPhone die vorinstallierte App <strong>Kurzbefehle</strong>.</li>
+      <li>Erstelle einen neuen Kurzbefehl namens <strong>„An ImmoFinder senden“</strong> und aktiviere in den Details <strong>„Im Share-Sheet anzeigen“</strong> (Empfangen: URLs &amp; Text).</li>
+      <li>Füge die Aktion <strong>„URL öffnen“</strong> hinzu mit der Adresse:<br />
+        <code id="shortcut-url-preview" style="display:block; background:#f1f3f5; padding:6px; border-radius:6px; margin-top:4px; word-break:break-all;"></code>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Datensicherung</h2>
+    <div class="grid-2">
+      <button class="btn btn-outline" onclick="exportBackup()">Backup teilen / exportieren</button>
+      <button class="btn btn-outline" style="color:var(--danger); border-color:#f5c2c7;" onclick="clearAllData()">Alle Daten löschen</button>
+    </div>
+  </div>
+</main>
+
+<!-- Bottom Navigation -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('search', this)">
+    <span class="tab-icon">&#128269;</span>
+    <span>30 Portale</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('inbox', this)">
+    <span class="tab-icon">&#128229;</span>
+    <span>Geteilt &amp; Merkliste</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('setup', this)">
+    <span class="tab-icon">&#9881;&#65039;</span>
+    <span>iPhone &amp; Profile</span>
+  </button>
+</nav>
+
+<script>
+  // ===========================================================================
+  // DIE 30 IMMOBILIENPORTALE (OHNE API-SCHLÜSSEL VIA SMART-QUERY-URL)
+  // ===========================================================================
+  const PORTALS = [
+    { name: "1. ImmoScout24", cat: "top", desc: "Marktführer für Mietwohnungen, Häuser & Mietkauf", build: (q) => `https://www.immobilienscout24.de/Suche/de/${q.citySlug}/${q.type === 'mietkauf' ? 'haus-kaufen' : q.type === 'haus-miete' ? 'haus-mieten' : q.type === 'haus-kauf' ? 'haus-kaufen' : 'wohnung-mieten'}?enteredFrom=one_step_search${q.rooms ? '&numberofrooms=' + q.rooms + '.0-' : ''}${q.price ? '&price=-' + q.price : ''}` },
+    { name: "2. Immowelt", cat: "top", desc: "Großes Portal inkl. Immonet-Bestand", build: (q) => `https://www.immowelt.de/liste/${q.citySlug}/${q.type.includes('kauf') ? 'haeuser/kaufen' : 'wohnungen/mieten'}?sort=relevanz${q.rooms ? '&roomi=' + q.rooms : ''}${q.price ? '&prima=' + q.price : ''}` },
+    { name: "3. Kleinanzeigen Immobilien", cat: "top", desc: "Viele private Vermieter & Mietkauf-Inserate", build: (q) => `https://www.kleinanzeigen.de/s-immobilien/${q.citySlug}/${encodeURIComponent(q.fullQuery)}/k0c195` },
+    { name: "4. Immonet", cat: "top", desc: "Wohnungen, Häuser & Spezialangebote", build: (q) => `https://www.immonet.de/immobiliensuche/sel.do?suchart=1&city=${encodeURIComponent(q.city)}&marketingtype=${q.type.includes('kauf') ? '1' : '2'}` },
+    { name: "5. Ohne-Makler.net", cat: "privat", desc: "100 % provisionsfrei direkt vom Eigentümer", build: (q) => `https://www.ohne-makler.net/immobilien/?q=${encodeURIComponent(q.fullQuery)}` },
+    { name: "6. Wohnungsboerse.net", cat: "top", desc: "Mietwohnungen, Mietkauf & Genossenschaften", build: (q) => `https://www.wohnungsboerse.net/searches/index?marketing_type=${q.type.includes('kauf') ? 'buy' : 'rent'}&city=${encodeURIComponent(q.city)}` },
+    { name: "7. Mietkauf.de", cat: "mietkauf", desc: "Spezialportal ausschließlich für Mietkauf-Immobilien", build: (q) => `https://www.mietkauf.de/angebote?ort=${encodeURIComponent(q.city)}` },
+    { name: "8. Meinestadt.de Immobilien", cat: "top", desc: "Regionale Wohnungs- & Hausangebote", build: (q) => `https://immobilien.meinestadt.de/${q.citySlug}/${q.type.includes('kauf') ? 'kaufen' : 'mieten'}` },
+    { name: "9. Immobilien.de", cat: "top", desc: "Bundesweite Immobiliensuche", build: (q) => `https://www.immobilien.de/Suche/${encodeURIComponent(q.city)}` },
+    { name: "10. WG-Gesucht", cat: "privat", desc: "Wohnungen, 1-4 Zimmer & Zwischenmiete von privat", build: (q) => `https://www.wg-gesucht.de/wohnungen-in-${q.citySlug}.html` },
+    { name: "11. Kalaydo Immobilien", cat: "privat", desc: "Regionaler Anzeigenmarkt für Miete & Kauf", build: (q) => `https://www.kalaydo.de/immobilien/${q.citySlug}/` },
+    { name: "12. Immopool.de", cat: "privat", desc: "Angebote von Maklern & Privatpersonen", build: (q) => `https://www.immopool.de/de/suche?ort=${encodeURIComponent(q.city)}` },
+    { name: "13. Wohnung-jetzt.de", cat: "privat", desc: "Mietwohnungen & Mietkauf-Inserate", build: (q) => `https://www.wohnung-jetzt.de/suche?ort=${encodeURIComponent(q.city)}&stichwort=${encodeURIComponent(q.typeLabel)}` },
+    { name: "14. Wunschimmo.de", cat: "top", desc: "Umfangreiche Datenbank für Miete & Kauf", build: (q) => `https://www.wunschimmo.de/suche/${q.citySlug}` },
+    { name: "15. 1a-Immobilienmarkt.de", cat: "mietkauf", desc: "Wohnungen, Häuser, Mietkauf & Anlageobjekte", build: (q) => `https://www.1a-immobilienmarkt.de/suche.html?ort=${encodeURIComponent(q.city)}` },
+    { name: "16. Immo4trans.de", cat: "mietkauf", desc: "Spezialisiert auf Mietkauf & Immobilienfinanzierung", build: (q) => `https://www.google.com/search?q=site:immo4trans.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "17. Null-Provision.de", cat: "privat", desc: "Provisionsfreie Immobilien von privat", build: (q) => `https://www.google.com/search?q=site:null-provision.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "18. Immobilie1.de", cat: "top", desc: "Portal deutscher Immobilienverbände", build: (q) => `https://www.immobilie1.de/suche?ort=${encodeURIComponent(q.city)}` },
+    { name: "19. Regionalimmobilien24", cat: "mietkauf", desc: "Lokale Angebote & Mietkauf-Objekte", build: (q) => `https://www.google.com/search?q=site:regionalimmobilien24.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "20. eBay Immobilien", cat: "mietkauf", desc: "Auktionen, Sofortkauf & Mietkauf-Angebote", build: (q) => `https://www.ebay.de/sch/i.html?_nkw=${encodeURIComponent(q.fullQuery)}&_sacat=10542` },
+    { name: "21. S-Immobilien (Sparkasse)", cat: "bank", desc: "Immobilien der Sparkassen-Finanzgruppe", build: (q) => `https://www.s-immobilien.de/suche?ort=${encodeURIComponent(q.city)}` },
+    { name: "22. VR-Immo (Volksbanken)", cat: "bank", desc: "Immobilienangebote der Volks- und Raiffeisenbanken", build: (q) => `https://www.google.com/search?q=site:vr-immo.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "23. Deutsche Bank Immobilien", cat: "bank", desc: "Geprüfte Wohn- und Anlageimmobilien", build: (q) => `https://www.google.com/search?q=site:immobilien.deutsche-bank.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "24. Postbank Immobilien", cat: "bank", desc: "Bundesweite Wohnungen & Häuser", build: (q) => `https://www.google.com/search?q=site:immobilien.postbank.de+${encodeURIComponent(q.fullQuery)}` },
+    { name: "25. Engel & Völkers", cat: "bank", desc: "Hochwertige Miet- und Kaufobjekte", build: (q) => `https://www.engelvoelkers.com/de-de/suche/?q=${encodeURIComponent(q.city)}` },
+    { name: "26. Von Poll Immobilien", cat: "bank", desc: "Traditionsmakler mit regionalen Standorten", build: (q) => `https://www.von-poll.com/de/immobilien?location=${encodeURIComponent(q.city)}` },
+    { name: "27. Nestoria Metasuche", cat: "mietkauf", desc: "Aggregiert Dutzende deutsche Immobilienbörsen", build: (q) => `https://www.nestoria.de/${q.citySlug}/immobilien/${q.type.includes('kauf') ? 'kaufen' : 'mieten'}` },
+    { name: "28. Trovit Immobilien", cat: "mietkauf", desc: "Suchmaschine für Kleinanzeigen & Portale", build: (q) => `https://immobilien.trovit.de/index.php/cod.search_homes/what_d.${encodeURIComponent(q.fullQuery)}/` },
+    { name: "29. Mitula Immobilien", cat: "mietkauf", desc: "Findet auch Mietkauf- & Nischeninserate", build: (q) => `https://immobilien.mitula.de/immobilien/${encodeURIComponent(q.fullQuery)}` },
+    { name: "30. Nuroa Immobilien", cat: "mietkauf", desc: "Preisvergleich & Metasuche für Wohnungen", build: (q) => `https://www.nuroa.de/mieten/${q.citySlug}` }
+  ];
+
+  let currentPortalFilter = "alle";
+  let savedItems = JSON.parse(localStorage.getItem("immofinder_saved") || "[]");
+  let savedProfiles = JSON.parse(localStorage.getItem("immofinder_profiles") || "[]");
+
+  // ===========================================================================
+  // INITIALISIERUNG & SHARE-EMPFANG (WENN VOM IPHONE GETEILT WIRD)
+  // ===========================================================================
+  window.addEventListener("DOMContentLoaded", () => {
+    handleIncomingShare();
+    renderPortals();
+    renderSavedItems();
+    renderProfiles();
+
+    const baseUrl = window.location.origin + window.location.pathname;
+    document.getElementById("shortcut-url-preview").textContent =
+      `${baseUrl}?share_url=[Kurzbefehleingabe]&share_title=Geteiltes+Inserat`;
+  });
+
+  function handleIncomingShare() {
+    const params = new URLSearchParams(window.location.search);
+    const sharedUrl = params.get("share_url") || params.get("url") || "";
+    const sharedTitle = params.get("share_title") || params.get("title") || "";
+    const sharedText = params.get("share_text") || params.get("text") || "";
+
+    // Falls URL im Text steckt (z. B. beim Teilen aus Safari/WhatsApp)
+    let extractedUrl = sharedUrl;
+    if (!extractedUrl && sharedText) {
+      const match = sharedText.match(/https?:\/\/[^\s]+/);
+      if (match) extractedUrl = match[0];
+    }
+
+    if (extractedUrl || sharedTitle || sharedText) {
+      const autoCat = (sharedTitle + " " + sharedText).toLowerCase().includes("mietkauf")
+        ? "Mietkauf"
+        : "Mietwohnung";
+
+      savedItems.unshift({
+        id: Date.now(),
+        url: extractedUrl,
+        title: sharedTitle || detectPortalName(extractedUrl) || "Geteiltes Immobilien-Inserat",
+        cat: autoCat,
+        note: sharedText && sharedText !== extractedUrl ? sharedText : "",
+        date: new Date().toLocaleDateString("de-DE")
+      });
+      persistSaved();
+      showToast("Geteiltes Inserat vom iPhone gespeichert!");
+
+      // Tab direkt auf "Geteilt & Merkliste" wechseln
+      const inboxTabBtn = document.querySelectorAll(".tab-btn")[1];
+      switchTab("inbox", inboxTabBtn);
+
+      // URL bereinigen, damit Reload nicht doppelt speichert
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  function detectPortalName(url) {
+    if (!url) return "";
+    try {
+      const host = new URL(url).hostname.replace("www.", "");
+      return "Inserat von " + host;
+    } catch {
+      return "";
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    setTimeout(() => { t.style.display = "none"; }, 2600);
+  }
+
+  function switchTab(tabName, btnEl) {
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.getElementById("view-" + tabName).classList.add("active");
+    if (btnEl) btnEl.classList.add("active");
+  }
+
+  // ===========================================================================
+  // SUCHLOGIK FÜR DIE 30 PORTALE
+  // ===========================================================================
+  function getQueryData() {
+    const city = document.getElementById("q-city").value.trim() || "Deutschland";
+    const type = document.getElementById("q-type").value;
+    const rooms = document.getElementById("q-rooms").value;
+    const price = document.getElementById("q-price").value.trim();
+    const keywords = document.getElementById("q-keywords").value.trim();
+
+    const typeLabels = {
+      "miete": "Mietwohnung",
+      "mietkauf": "Mietkauf",
+      "haus-miete": "Haus mieten",
+      "haus-kauf": "Haus kaufen",
+      "sonstiges": "Immobilie"
+    };
+
+    const citySlug = city.toLowerCase()
+      .replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/ß/g, "ss")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+    const typeLabel = typeLabels[type] || "Mietwohnung";
+    const fullQuery = [typeLabel, city, rooms ? `${rooms} Zimmer` : "", keywords]
+      .filter(Boolean)
+      .join(" ");
+
+    return { city, citySlug, type, typeLabel, rooms, price, keywords, fullQuery };
+  }
+
+  function filterPortalCat(cat, btn) {
+    currentPortalFilter = cat;
+    document.querySelectorAll("#cat-pills .pill").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    renderPortals();
+  }
+
+  function renderPortals() {
+    const q = getQueryData();
+    const list = document.getElementById("portal-list");
+    list.innerHTML = "";
+
+    const filtered = PORTALS.filter(p => currentPortalFilter === "alle" || p.cat === currentPortalFilter);
+    document.getElementById("portal-count").textContent = filtered.length;
+
+    filtered.forEach(p => {
+      const targetUrl = p.build(q);
+      const isMk = p.cat === "mietkauf";
+      const div = document.createElement("div");
+      div.className = "portal-item";
+      div.innerHTML = `
+        <div class="portal-info">
+          <div class="portal-name">
+            <span>${p.name}</span>
+            ${isMk ? '<span class="badge badge-mk">Mietkauf</span>' : ''}
+          </div>
+          <div class="portal-desc">${p.desc}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <a href="${targetUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="text-decoration:none;">Öffnen</a>
+          <button class="btn btn-outline btn-sm" onclick="quickSaveSearch('${p.name.replace(/'/g, "")}', '${targetUrl}')">+</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function quickSaveSearch(portalName, url) {
+    const q = getQueryData();
+    savedItems.unshift({
+      id: Date.now(),
+      url: url,
+      title: `${portalName}: ${q.typeLabel} in ${q.city}`,
+      cat: q.type === "mietkauf" ? "Mietkauf" : "Mietwohnung",
+      note: q.fullQuery,
+      date: new Date().toLocaleDateString("de-DE")
+    });
+    persistSaved();
+    showToast("Suchlink in Merkliste abgelegt!");
+  }
+
+  // ===========================================================================
+  // MERKLISTE & TEILEN AUF DEM IPHONE (WEB SHARE API)
+  // ===========================================================================
+  function addManualItem() {
+    const url = document.getElementById("in-url").value.trim();
+    const title = document.getElementById("in-title").value.trim() || detectPortalName(url) || "Immobilien-Angebot";
+    const cat = document.getElementById("in-cat").value;
+    const note = document.getElementById("in-note").value.trim();
+
+    if (!url && !title) {
+      showToast("Bitte Link oder Titel eingeben.");
+      return;
+    }
+
+    savedItems.unshift({
+      id: Date.now(),
+      url: url,
+      title: title,
+      cat: cat,
+      note: note,
+      date: new Date().toLocaleDateString("de-DE")
+    });
+
+    document.getElementById("in-url").value = "";
+    document.getElementById("in-title").value = "";
+    document.getElementById("in-note").value = "";
+
+    persistSaved();
+    showToast("In Merkliste gespeichert!");
+  }
+
+  async function pasteFromClipboard() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        document.getElementById("in-url").value = text.trim();
+        if (!document.getElementById("in-title").value) {
+          document.getElementById("in-title").value = detectPortalName(text.trim());
+        }
+        showToast("Aus Zwischenablage eingefügt!");
+      }
+    } catch {
+      showToast("Bitte lang in das Link-Feld tippen und 'Einsetzen' wählen.");
+    }
+  }
+
+  function persistSaved() {
+    localStorage.setItem("immofinder_saved", JSON.stringify(savedItems));
+    renderSavedItems();
+  }
+
+  function renderSavedItems() {
+    const container = document.getElementById("saved-list");
+    document.getElementById("saved-count").textContent = savedItems.length;
+    container.innerHTML = "";
+
+    if (savedItems.length === 0) {
+      container.innerHTML = `<p style="font-size:13px; color:var(--muted);">Noch keine Inserate gespeichert. Teile einen Link vom iPhone oder speichere einen Treffer aus der Suche.</p>`;
+      return;
+    }
+
+    savedItems.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "card saved-card";
+      div.style.marginBottom = "10px";
+      div.innerHTML = `
+        <div class="saved-title">${item.title}</div>
+        <div class="saved-meta">
+          <span class="badge ${item.cat === 'Mietkauf' ? 'badge-mk' : ''}">${item.cat}</span>
+          &bull; Gespeichert am ${item.date}
+          ${item.note ? `<br/>Notiz: <strong>${item.note}</strong>` : ""}
+        </div>
+        <div class="saved-actions">
+          ${item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="text-decoration:none;">Inserat öffnen</a>` : ""}
+          <button class="btn btn-outline btn-sm" onclick="shareSingleItem(${item.id})">Auf Handy teilen</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="deleteSaved(${item.id})">Löschen</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function deleteSaved(id) {
+    savedItems = savedItems.filter(i => i.id !== id);
+    persistSaved();
+  }
+
+  async function shareSingleItem(id) {
+    const item = savedItems.find(i => i.id === id);
+    if (!item) return;
+    const sharePayload = {
+      title: item.title,
+      text: `${item.title} (${item.cat})${item.note ? ' - ' + item.note : ''}`,
+      url: item.url || window.location.href
+    };
+    await triggerNativeShare(sharePayload);
+  }
+
+  async function shareCurrentSearch() {
+    const q = getQueryData();
+    const shareUrl = `${window.location.origin}${window.location.pathname}?share_title=${encodeURIComponent("Immo-Suche: " + q.fullQuery)}`;
+    await triggerNativeShare({
+      title: `Immo-Suche: ${q.fullQuery}`,
+      text: `Immobilien-Suchprofil (${q.fullQuery}) auf 30 Portalen prüfen:`,
+      url: shareUrl
+    });
+  }
+
+  async function shareAllFavorites() {
+    if (savedItems.length === 0) {
+      showToast("Merkliste ist noch leer.");
+      return;
+    }
+    const summary = savedItems.slice(0, 15).map((item, idx) =>
+      `${idx + 1}. ${item.title} [${item.cat}]${item.url ? '\n' + item.url : ''}`
+    ).join("\n\n");
+
+    await triggerNativeShare({
+      title: "Meine Immobilien-Merkliste",
+      text: `Gespeicherte Miet- & Mietkauf-Angebote:\n\n${summary}`
+    });
+  }
+
+  async function triggerNativeShare(data) {
+    if (navigator.share) {
+      try {
+        await navigator.share(data);
+      } catch (err) {
+        // Nutzer hat Teilen-Dialog abgebrochen
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${data.title}\n${data.text}\n${data.url || ""}`);
+        showToast("In Zwischenablage kopiert (bereit zum Einfügen)!");
+      } catch {
+        alert(`${data.title}\n${data.text}`);
+      }
+    }
+  }
+
+  // ===========================================================================
+  // SUCHPROFILE & BACKUP
+  // ===========================================================================
+  function saveSearchProfile() {
+    const q = getQueryData();
+    savedProfiles.unshift({
+      id: Date.now(),
+      label: `${q.typeLabel} in ${q.city}${q.rooms ? ' (ab ' + q.rooms + ' Zi.)' : ''}`,
+      city: q.city,
+      type: q.type,
+      rooms: q.rooms,
+      price: q.price,
+      keywords: q.keywords
+    });
+    localStorage.setItem("immofinder_profiles", JSON.stringify(savedProfiles));
+    renderProfiles();
+    showToast("Suchprofil gespeichert!");
+  }
+
+  function renderProfiles() {
+    const box = document.getElementById("profiles-list");
+    box.innerHTML = "";
+    if (savedProfiles.length === 0) {
+      box.innerHTML = `<p style="font-size:13px; color:var(--muted);">Noch keine Suchprofile gespeichert.</p>`;
+      return;
+    }
+    savedProfiles.forEach(p => {
+      const row = document.createElement("div");
+      row.className = "portal-item";
+      row.innerHTML = `
+        <div class="portal-info">
+          <div class="portal-name">${p.label}</div>
+          <div class="portal-desc">${p.keywords || "Keine Zusatz-Stichworte"}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-primary btn-sm" onclick="applyProfile(${p.id})">Laden</button>
+          <button class="btn btn-outline btn-sm" style="color:var(--danger);" onclick="deleteProfile(${p.id})">X</button>
+        </div>
+      `;
+      box.appendChild(row);
+    });
+  }
+
+  function applyProfile(id) {
+    const p = savedProfiles.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById("q-city").value = p.city;
+    document.getElementById("q-type").value = p.type;
+    document.getElementById("q-rooms").value = p.rooms;
+    document.getElementById("q-price").value = p.price;
+    document.getElementById("q-keywords").value = p.keywords;
+    renderPortals();
+    switchTab("search", document.querySelectorAll(".tab-btn")[0]);
+    showToast("Suchprofil geladen!");
+  }
+
+  function deleteProfile(id) {
+    savedProfiles = savedProfiles.filter(x => x.id !== id);
+    localStorage.setItem("immofinder_profiles", JSON.stringify(savedProfiles));
+    renderProfiles();
+  }
+
+  async function exportBackup() {
+    const payload = JSON.stringify({ savedItems, savedProfiles }, null, 2);
+    await triggerNativeShare({
+      title: "ImmoFinder 30 Backup",
+      text: payload
+    });
+  }
+
+  function clearAllData() {
+    if (confirm("Wirklich alle gespeicherten Inserate und Suchprofile löschen?")) {
+      savedItems = [];
+      savedProfiles = [];
+      localStorage.removeItem("immofinder_saved");
+      localStorage.removeItem("immofinder_profiles");
+      renderSavedItems();
+      renderProfiles();
+      showToast("Alle Daten gelöscht.");
+    }
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+</script>
+</body>
+</html>
